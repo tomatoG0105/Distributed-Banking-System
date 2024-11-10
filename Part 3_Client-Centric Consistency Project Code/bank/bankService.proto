@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+
+package BankService;
+
+// The bank service definition.
+service BankService {
+    // Method for communication between Customer and Branch
+    rpc MsgDelivery(CustomerRequest) returns (ResponseMessage);
+
+    // Method to query the balance of a Branch
+    rpc Query(BalanceQuery) returns (ResponseMessage);
+
+    // Method to withdraw from a Branch
+    rpc Withdraw(CustomerRequest) returns (ResponseMessage);
+
+    // Method to deposit to a Branch
+    rpc Deposit(CustomerRequest) returns (ResponseMessage);
+
+    // Method for Branch to handle requests from fellow branches
+    rpc Propagate_Withdraw(BranchRequest) returns (ResponseMessage);
+
+    // Method for Branch to handle requests from fellow branches
+    rpc Propagate_Deposit(BranchRequest) returns (ResponseMessage);
+
+}
+
+message CustomerRequest {
+    int32 customer_id = 1;
+    string event = 2;
+    int32 amount = 3;
+    repeated int32 write_set = 4; // Track write operations' IDs
+
+message BranchRequest {
+    int32 branch_id = 1;
+    int32 amount = 2;
+    repeated int32 write_set = 3; // Added to maintain consistency in inter-branch communications
+}
+
+message ResponseMessage {
+    string message = 1;
+    bool success = 2;
+    int32 write_id = 3; // Track individual write operations
+}
+
+message BalanceQuery {
+    int32 branch_id = 1;
+}

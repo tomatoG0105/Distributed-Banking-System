@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+//option java_package = "io.grpc.examples.helloworld";
+//option java_outer_classname = "HelloWorldProto";
+//option objc_class_prefix = "HLW";
+
+package LogicalClock;
+
+// The bank service definition.
+service LogicalClock {
+    // Method to send a request from customer to branch
+    rpc MsgDelivery(Request) returns (Response);
+    // Method to receive the request
+    rpc RecvRequest(Request) returns (Response);
+    // Method to propagate the request to other branches
+    rpc PropagateToBranches(Request) returns (Response);
+}
+
+message Request {
+    int32 sender_id = 1;
+    string type = 2;
+    int32 customer_request_id = 3;
+    string interface = 4;
+    int32 money = 5;
+    int32 clock = 6;
+
+}
+
+message Response {
+    int32 sender_id = 1;
+    string type = 2;
+    int32 customer_request_id = 3;
+    string interface = 4;
+    int32 money = 5;
+    int32 clock = 6;
+}
